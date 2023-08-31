@@ -3,9 +3,10 @@ namespace HouseRentingSystem.Services.Data.Interfaces
 {
 	using Web.ViewModels.House;
 	using Web.ViewModels.Home;
-	using Data.Models.House;
+	using Models.House;
+    using Models.Statistics;
 
-	public interface IHouseService
+    public interface IHouseService
     {
         Task<IEnumerable<IndexViewModel>> LastThreeHousesAsync();
 
@@ -38,5 +39,7 @@ namespace HouseRentingSystem.Services.Data.Interfaces
 		Task<bool> IsRentedByUserWithIdAsync(string houseId, string userId);
 
 		Task LeaveHouseAsync(string houseId);
+
+		Task<StatisticServiceModel> GetStatisticAsync();
 	}
 }

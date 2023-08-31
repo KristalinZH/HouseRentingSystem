@@ -12,8 +12,9 @@ namespace HouseRentingSystem.Services.Data
 	using HouseRentingSystem.Data.Models;
     using Interfaces;
 	using Models.House;
+    using Models.Statistics;
 
-	public class HouseService : IHouseService
+    public class HouseService : IHouseService
     {
         private readonly HouseRentingDbContext dbContext;
         public HouseService(HouseRentingDbContext _dbContext)
@@ -247,6 +248,15 @@ namespace HouseRentingSystem.Services.Data
             House house = await dbContext.Houses.FirstAsync(h => h.Id.ToString() == houseId);
             house.RenterId = null;
             await dbContext.SaveChangesAsync();
+        }
+
+        public async Task<StatisticServiceModel> GetStatisticAsync()
+        {
+            return new StatisticServiceModel()
+            { 
+                TotalHouses=await dbContext.Houses.CountAsync(),
+                TotalRents=await dbContext.Houses.Where(h=>h.RenterId.HasValue).CountAsync()
+            };
         }
     }
 }
