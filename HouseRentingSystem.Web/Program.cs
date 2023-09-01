@@ -7,6 +7,7 @@ namespace HouseRentingSystem.Web
 	using Data;
     using Data.Models;
 	using Services.Data.Interfaces;
+	using Microsoft.AspNetCore.Mvc;
 
 	public class Program
 	{
@@ -36,6 +37,7 @@ namespace HouseRentingSystem.Web
 				.AddMvcOptions(opt=>
 				{
 					opt.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
+					opt.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
 				});
 
 			WebApplication app = builder.Build();

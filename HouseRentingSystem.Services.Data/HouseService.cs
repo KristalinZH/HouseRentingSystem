@@ -220,7 +220,7 @@ namespace HouseRentingSystem.Services.Data
             await dbContext.SaveChangesAsync();
 		}
 
-        public async Task<bool> IsRentedByIdAsync(string houseId)
+        public async Task<bool> IsRentedAsync(string houseId)
         {
             House house = await dbContext
                 .Houses

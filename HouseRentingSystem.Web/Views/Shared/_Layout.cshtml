@@ -1,5 +1,11 @@
 ﻿@using static HouseRentingSystem.Common.GeneralApplicationConstants;
-
+@using HouseRentingSystem.Services.Data.Interfaces;
+@using HouseRentingSystem.Web.Infrastructure.Extensions;
+@inject IAgentService agentService;
+@{
+    string? userId = User.GetId();
+    bool isUserAgent = userId != null ? await agentService.AgentExistsByUserIdAsync(userId) : false;
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,9 +39,12 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="House" asp-action="Mine">My Houses</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="House" asp-action="Add">Add House</a>
-                            </li>
+                            @if (isUserAgent)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="House" asp-action="Add">Add House</a>
+                                </li>
+                            }
                         }
                     </ul>
                     <partial name="_LoginPartial" />

@@ -293,7 +293,7 @@ namespace HouseRentingSystem.Web.Controllers
                     TempData["ErrorMessage"] = "House with provided id does not exists! Please try again!";
                     return RedirectToAction("All", "House");
                 }
-                bool isHouseRented = await houseService.IsRentedByIdAsync(id);
+                bool isHouseRented = await houseService.IsRentedAsync(id);
                 if (isHouseRented)
                 {
                     TempData["ErrorMessage"] = "Selected house is already rented by another user! Please select another house!";
@@ -324,7 +324,7 @@ namespace HouseRentingSystem.Web.Controllers
                     TempData["ErrorMessage"] = "House with provided id does not exists! Please try again!";
                     return RedirectToAction("All", "House");
                 }
-                bool isHouseRented = await houseService.IsRentedByIdAsync(id);
+                bool isHouseRented = await houseService.IsRentedAsync(id);
                 if (!isHouseRented)
                 {
                     TempData["ErrorMessage"] = "Selected house is not rented! Please select one of you houses if you wish to leave them!";
