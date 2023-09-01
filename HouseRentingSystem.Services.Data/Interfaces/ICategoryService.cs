@@ -4,10 +4,14 @@
 
     public interface ICategoryService
     {
-        Task<IEnumerable<HouseSelectCategoryFromModel>> AllCategoriesAsync();
+        Task<IEnumerable<HouseSelectCategoryFormModel>> AllCategoriesAsync();
 
         Task<bool> ExistsByIdAsync(int id);
 
         Task<IEnumerable<string>> AllCategoryNamesAsync();
-    }
+
+		Task<IEnumerable<AllCategoriesViewModel>> AllCategoriesForListAsync();
+
+		Task<CategoryDetailsViewModel> GetDetailsByIdAsync(int id);
+	}
 }

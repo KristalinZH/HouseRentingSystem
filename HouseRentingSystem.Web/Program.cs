@@ -15,26 +15,26 @@ namespace HouseRentingSystem.Web
 		{
 			WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-			string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+			string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
 				?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 			builder.Services.AddDbContext<HouseRentingDbContext>(options =>
 				options.UseSqlServer(connectionString));
 
-			builder.Services.AddDefaultIdentity<ApplicationUser>(options => 
-			{ 
+			builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+			{
 				options.SignIn.RequireConfirmedAccount = builder.Configuration.GetValue<bool>("Identity:SignIn:RequireConfirmedAccount");
-				options.Password.RequireLowercase = builder.Configuration.GetValue<bool>("Identity:Password:RequireLowercase"); 
-                options.Password.RequireUppercase = builder.Configuration.GetValue<bool>("Identity:Password:RequireUppercase"); 
+				options.Password.RequireLowercase = builder.Configuration.GetValue<bool>("Identity:Password:RequireLowercase");
+				options.Password.RequireUppercase = builder.Configuration.GetValue<bool>("Identity:Password:RequireUppercase");
 				options.Password.RequireNonAlphanumeric = builder.Configuration.GetValue<bool>("Identity:Password:RequireNonAlphanumeric");
 				options.Password.RequiredLength = builder.Configuration.GetValue<int>("Identity:Password:RequiredLength");
-            })
+			})
 				.AddEntityFrameworkStores<HouseRentingDbContext>();
 
 			builder.Services.AddAplicationServices(typeof(IHouseService));
 
 			builder.Services
 				.AddControllersWithViews()
-				.AddMvcOptions(opt=>
+				.AddMvcOptions(opt =>
 				{
 					opt.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
 					opt.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
@@ -62,8 +62,17 @@ namespace HouseRentingSystem.Web
 			app.UseAuthentication();
 			app.UseAuthorization();
 
-			app.MapDefaultControllerRoute();
-			app.MapRazorPages();
+			app.UseEndpoints(config =>
+				{
+					config.MapControllerRoute(
+						name: "ProtectingUrlRoute",
+						pattern: "/{controller}/{action}/{id}/{information}",
+						defaults: new { Controller = "Category", Action = "Details" });
+
+					config.MapDefaultControllerRoute();
+
+					config.MapRazorPages();
+				});
 
 			app.Run();
 		}

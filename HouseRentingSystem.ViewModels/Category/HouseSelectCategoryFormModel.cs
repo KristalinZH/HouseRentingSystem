@@ -1,6 +1,6 @@
 ﻿namespace HouseRentingSystem.Web.ViewModels.Category
 {
-    public class HouseSelectCategoryFromModel
+    public class HouseSelectCategoryFormModel
     {
         public int Id { get; set; }
 

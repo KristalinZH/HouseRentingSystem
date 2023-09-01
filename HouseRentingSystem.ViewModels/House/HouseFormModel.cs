@@ -8,7 +8,7 @@
     {
         public HouseFormModel()
         {
-            Categories = new HashSet<HouseSelectCategoryFromModel>();
+            Categories = new HashSet<HouseSelectCategoryFormModel>();
         }
         [Required]
         [StringLength(TitleMaxLenght,MinimumLength =TitleMinLenght)]
@@ -29,6 +29,6 @@
         [Display(Name ="Category")]
         public int CategoryId { get; set; }
 
-        public IEnumerable<HouseSelectCategoryFromModel> Categories { get; set; }
+        public IEnumerable<HouseSelectCategoryFormModel> Categories { get; set; }
     }
 }
