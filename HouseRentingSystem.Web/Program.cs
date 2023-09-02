@@ -32,6 +32,11 @@ namespace HouseRentingSystem.Web
 
 			builder.Services.AddAplicationServices(typeof(IHouseService));
 
+			builder.Services.ConfigureApplicationCookie(cfg =>
+			{
+				cfg.LoginPath = "/User/Login";
+			});
+
 			builder.Services
 				.AddControllersWithViews()
 				.AddMvcOptions(opt =>

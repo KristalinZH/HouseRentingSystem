@@ -2,24 +2,19 @@
 {
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Authentication;
     using Data.Models;
     using ViewModels.User;
-    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-    using Microsoft.AspNetCore.WebUtilities;
-    using System.Text;
-
+    using static Common.NotificationMessagesConstants;
     public class UserController : BaseController
     {
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly UserManager<ApplicationUser> userManager;
-        private readonly IUserStore<ApplicationUser> userStore;
         public UserController(SignInManager<ApplicationUser> _signInManager,
-            UserManager<ApplicationUser> _userManager,
-            IUserStore<ApplicationUser> _userStore)
+            UserManager<ApplicationUser> _userManager)
         {
             signInManager = _signInManager;
             userManager = _userManager;
-            userStore = _userStore;
         }
         [HttpGet]
         public async Task<IActionResult> Register()
@@ -58,6 +53,36 @@
             {
                 return GeneralError();
             }
-        } 
+        }
+        [HttpGet]
+        public async Task<IActionResult> Login(string? returnUrl = null)
+        {
+            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+            LoginFormModel model = new LoginFormModel()
+            {
+                ReturnUrl=returnUrl
+            };
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginFormModel model, string? returnUrl = null)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return View(model);
+                var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                if (!result.Succeeded)
+                {
+                    TempData[ErrorMessage] = "There was an error while loging you in! Please try again later or contact administrator!";
+                    return View(model);
+                }
+                return Redirect(model.ReturnUrl ?? "/Home/Index");
+            }
+            catch (Exception)
+            {
+                return GeneralError();
+            }
+        }
     }
 }
