@@ -15,12 +15,16 @@ namespace HouseRentingSystem.Web.Controllers
         private readonly ICategoryService categoryService;
         private readonly IAgentService agentService;
 		private readonly IHouseService houseService;
-		public HouseController(ICategoryService _categoryService, IAgentService _agentService, IHouseService _houseService)
+        private readonly IUserService userService;
+		public HouseController(ICategoryService _categoryService, 
+            IAgentService _agentService, 
+            IHouseService _houseService,
+			IUserService _userService)
         {
             categoryService = _categoryService;
             agentService = _agentService;
             houseService = _houseService;
-
+            userService = _userService;
 		}
         [HttpGet]
         [AllowAnonymous]
@@ -107,6 +111,7 @@ namespace HouseRentingSystem.Web.Controllers
                     return RedirectToAction("All", "House");
                 }
                 HouseDetailsViewModel viewModel = await houseService.GetDetailsByIdAsync(id);
+                viewModel.Agent.FullName = await userService.GetFullNameByEmailAsync(viewModel.Agent.Email);
                 return View(viewModel);
             }
             catch (Exception)

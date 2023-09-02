@@ -3,17 +3,19 @@
 @using HouseRentingSystem.Services.Data.Interfaces;
 @using HouseRentingSystem.Web.Infrastructure.Extensions;
 @inject IAgentService agentService;
+@inject IUserService userService;
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 @{
 	string? userId = User.GetId();
 	bool isUserAgent = userId != null ? await agentService.AgentExistsByUserIdAsync(userId) : false;
+	string userFullname = userId != null ? await userService.GetFullNameByEmailAsync(User.Identity!.Name!) : string.Empty;
 }
 <ul class="navbar-nav">
 	@if (SignInManager.IsSignedIn(User))
 	{
 		<li class="nav-item">
-			<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello, @User.Identity?.Name!</a>
+			<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello, @userFullname</a>
 		</li>
 		@if (!isUserAgent)
 		{
