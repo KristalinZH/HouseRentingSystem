@@ -69,7 +69,8 @@ namespace HouseRentingSystem.Web
 			app.UseAuthentication();
 			app.UseAuthorization();
 
-			app.SeedAdministrator(DevelopementAdminEmail);
+			if (app.Environment.IsDevelopment())
+				app.SeedAdministrator(DevelopementAdminEmail);
 
 			app.UseEndpoints(config =>
 				{

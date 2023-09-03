@@ -8,7 +8,7 @@
 	bool isUserAgent = userId != null ? await agentService.AgentExistsByUserIdAsync(userId) : false;
 	bool isAgentOwnerOfTheHouse = userId != null ? 
 		await agentService.HasHouseWithIdAsync(userId, Model.Id) : false;
-	bool isHouseRentedByUser = userId != null && !isUserAgent ?
+	bool isHouseRentedByUser = userId != null && isUserAgent ?
 		await houseService.IsRentedByUserWithIdAsync(Model.Id, userId) : false;
 }
 <div class="col-md-4">
@@ -26,13 +26,13 @@
 			<a asp-controller="House" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-success">Details</a>
 			@if (this.User?.Identity?.IsAuthenticated ?? false)
 			{
-				@if(isUserAgent && isAgentOwnerOfTheHouse)
+				@if((isUserAgent && isAgentOwnerOfTheHouse) || User.IsAdmin())
 				{
 					<a asp-controller="House" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
 					<a asp-controller="House" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
 				}
 				<p></p>
-				@if (!isUserAgent)
+				@if (!isUserAgent || User.IsAdmin())
 				{
 					if (!Model.IsRented)
 					{
