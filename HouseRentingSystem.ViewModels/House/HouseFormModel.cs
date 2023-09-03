@@ -2,9 +2,12 @@
 {
     using System.ComponentModel.DataAnnotations;
     using Category;
-    using static Common.EntityValidationConstants.House;
+	using Services.Mapping;
+    using Data.Models;
+	using AutoMapper;
+	using static Common.EntityValidationConstants.House;
 
-    public class HouseFormModel
+	public class HouseFormModel:IMapTo<House>,IHaveCustomMappings
     {
         public HouseFormModel()
         {
@@ -30,5 +33,11 @@
         public int CategoryId { get; set; }
 
         public IEnumerable<HouseSelectCategoryFormModel> Categories { get; set; }
-    }
+
+		public void CreateMappings(IProfileExpression configuration)
+		{
+            configuration.CreateMap<HouseFormModel, House>()
+                .ForMember(d => d.AgentId,opt => opt.Ignore());
+		}
+	}
 }
