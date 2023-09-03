@@ -1,15 +1,19 @@
 
 namespace HouseRentingSystem.Web
 {
-	using Microsoft.EntityFrameworkCore;
+	using Data;
+	using Data.Models;
 	using Infrastructure.Extensions;
 	using Infrastructure.ModelBinders;
-	using Data;
-    using Data.Models;
-	using Services.Data.Interfaces;
-	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.AspNetCore.Identity;
+	using Microsoft.AspNetCore.Mvc;
+	using Microsoft.EntityFrameworkCore;
+	using Services.Data.Interfaces;
+	using Services.Mapping;
+	using System.Reflection;
+	using ViewModels.Home;
 	using static Common.GeneralApplicationConstants;
+
 	public class Program
 	{
 		public static void Main(string[] args)
@@ -48,6 +52,8 @@ namespace HouseRentingSystem.Web
 				});
 
 			WebApplication app = builder.Build();
+
+			AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
 
 			if (app.Environment.IsDevelopment())
 			{

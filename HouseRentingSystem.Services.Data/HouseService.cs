@@ -1,20 +1,20 @@
 ﻿
 namespace HouseRentingSystem.Services.Data
 {
-    using System.Threading.Tasks;
-    using System.Collections.Generic;
-    using Microsoft.EntityFrameworkCore;
-    using Web.ViewModels.Home;
+	using HouseRentingSystem.Data;
+	using HouseRentingSystem.Data.Models;
+	using Interfaces;
+	using Mapping;
+	using Microsoft.EntityFrameworkCore;
+	using Models.House;
+	using Models.Statistics;
+	using System.Collections.Generic;
+	using System.Threading.Tasks;
+	using Web.ViewModels.Agent;
+	using Web.ViewModels.Home;
 	using Web.ViewModels.House;
 	using Web.ViewModels.House.Enums;
-	using Web.ViewModels.Agent;
-    using HouseRentingSystem.Data;
-	using HouseRentingSystem.Data.Models;
-    using Interfaces;
-	using Models.House;
-    using Models.Statistics;
-
-    public class HouseService : IHouseService
+	public class HouseService : IHouseService
     {
         private readonly HouseRentingDbContext dbContext;
         public HouseService(HouseRentingDbContext _dbContext)
@@ -27,12 +27,8 @@ namespace HouseRentingSystem.Services.Data
             .Where(h=>h.IsActive)
             .OrderByDescending(h => h.CreatedOn)
             .Take(3)
-            .Select(h => new IndexViewModel()
-            {
-                Id = h.Id.ToString(),
-                Title = h.Title,
-                ImageUrl = h.ImageUrl
-            }).ToArrayAsync();
+            .To<IndexViewModel>()
+            .ToArrayAsync();
 
         public async Task<string> CreateAndReturnIdAsync(HouseFormModel formModel, string agentId)
         {
