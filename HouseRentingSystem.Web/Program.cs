@@ -8,7 +8,8 @@ namespace HouseRentingSystem.Web
     using Data.Models;
 	using Services.Data.Interfaces;
 	using Microsoft.AspNetCore.Mvc;
-
+	using Microsoft.AspNetCore.Identity;
+	using static Common.GeneralApplicationConstants;
 	public class Program
 	{
 		public static void Main(string[] args)
@@ -28,6 +29,7 @@ namespace HouseRentingSystem.Web
 				options.Password.RequireNonAlphanumeric = builder.Configuration.GetValue<bool>("Identity:Password:RequireNonAlphanumeric");
 				options.Password.RequiredLength = builder.Configuration.GetValue<int>("Identity:Password:RequiredLength");
 			})
+				.AddRoles<IdentityRole<Guid>>()
 				.AddEntityFrameworkStores<HouseRentingDbContext>();
 
 			builder.Services.AddAplicationServices(typeof(IHouseService));
@@ -66,6 +68,8 @@ namespace HouseRentingSystem.Web
 
 			app.UseAuthentication();
 			app.UseAuthorization();
+
+			app.SeedAdministrator(DevelopementAdminEmail);
 
 			app.UseEndpoints(config =>
 				{
