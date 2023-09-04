@@ -8,6 +8,7 @@ namespace HouseRentingSystem.Web.Controllers
     using ViewModels.House;
     using Infrastructure.Extensions;
     using static Common.NotificationMessagesConstants;
+	using static Common.GeneralApplicationConstants;
 
 	[Authorize]
     public class HouseController : BaseController
@@ -125,6 +126,10 @@ namespace HouseRentingSystem.Web.Controllers
         {   
             try
             {
+                if (User.IsAdmin())
+                {
+                    return RedirectToAction("Mine", "House", new { Area = AdminAreaName });
+                }
                 List<HouseAllViewModel> myHouses = new List<HouseAllViewModel>();
                 string userId = User.GetId()!;
                 bool isUserAgent = await agentService.AgentExistsByUserIdAsync(userId);
