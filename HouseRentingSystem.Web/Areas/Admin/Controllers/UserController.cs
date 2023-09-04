@@ -1,24 +1,43 @@
 ﻿namespace HouseRentingSystem.Web.Areas.Admin.Controllers
 {
-	using HouseRentingSystem.Web.ViewModels.User;
-	using Microsoft.AspNetCore.Mvc;
-	using Services.Data.Interfaces;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Caching.Memory;
+    using Services.Data.Interfaces;
+    using Web.ViewModels.User;
 
-	public class UserController : BaseController
+    using static Common.GeneralApplicationConstants;
+    public class UserController : BaseController
 	{
-		private readonly IUserService userService;
-        public UserController(IUserService _userService)
+        private readonly IUserService userService;
+        private readonly IMemoryCache memoryCache;
+
+        public UserController(IUserService userService, IMemoryCache memoryCache)
         {
-			userService = _userService;
-		}
-		[Route("User/All")]
-		public async Task<IActionResult> All()
+            this.userService = userService;
+            this.memoryCache = memoryCache;
+        }
+
+        [Route("User/All")]
+        [ResponseCache(Duration = 30, Location = ResponseCacheLocation.Client, NoStore = false)]
+        public async Task<IActionResult> All()
 		{
 			try
 			{
-				IEnumerable<UserViewModel> model = await userService.AllAsync();
-				return View(model);
-			}
+                IEnumerable<UserViewModel> users =
+                this.memoryCache.Get<IEnumerable<UserViewModel>>(UsersCacheKey);
+                if (users == null)
+                {
+                    users = await this.userService.AllAsync();
+
+                    MemoryCacheEntryOptions cacheOptions = new MemoryCacheEntryOptions()
+                        .SetAbsoluteExpiration(TimeSpan
+                            .FromMinutes(UsersCacheDurationMinutes));
+
+                    this.memoryCache.Set(UsersCacheKey, users, cacheOptions);
+                }
+
+                return View(users);
+            }
 			catch (Exception)
 			{
 				return GeneralError();

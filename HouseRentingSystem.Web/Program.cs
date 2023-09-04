@@ -38,7 +38,10 @@ namespace HouseRentingSystem.Web
 
 			builder.Services.AddAplicationServices(typeof(IHouseService));
 
-			builder.Services.ConfigureApplicationCookie(cfg =>
+            builder.Services.AddMemoryCache();
+            builder.Services.AddResponseCaching();
+
+            builder.Services.ConfigureApplicationCookie(cfg =>
 			{
 				cfg.LoginPath = "/User/Login";
 			});
@@ -72,7 +75,9 @@ namespace HouseRentingSystem.Web
 
 			app.UseRouting();
 
-			app.UseAuthentication();
+            app.UseResponseCaching();
+
+            app.UseAuthentication();
 			app.UseAuthorization();
 
 			app.EnableOnlineUsersCheck();

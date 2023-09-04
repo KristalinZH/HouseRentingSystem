@@ -12,5 +12,10 @@
 
 		public const string OnlineUsersCookieName = "IsOnline";
 		public const int LastActivityBeforeOfflineMinutes = 10;
-	}
+
+        public const string UsersCacheKey = "UsersCache";
+        public const string RentsCacheKey = "RentsCache";
+        public const int UsersCacheDurationMinutes = 5;
+        public const int RentsCacheDurationMinutes = 10;
+    }
 }
