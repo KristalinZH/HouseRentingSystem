@@ -31,6 +31,7 @@
                 .Where(u => !dbContext.Agents.Any(a => a.UserId == u.Id))
                 .Select(u => new UserViewModel()
                 {
+                    Id=u.Id.ToString(),
                     FullName = u.FirstName + " " + u.LastName,
                     Email = u.Email,
                     PhoneNumber = string.Empty

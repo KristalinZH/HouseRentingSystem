@@ -1,7 +1,8 @@
 ﻿namespace HouseRentingSystem.Web.Infrastructure.Extensions
 {
 	using System.Reflection;
-	using HouseRentingSystem.Data.Models;
+	using Data.Models;
+	using Middlewares;
 	using Microsoft.AspNetCore.Builder;
 	using Microsoft.AspNetCore.Identity;
 	using Microsoft.Extensions.DependencyInjection;
@@ -63,6 +64,11 @@
 				.GetResult();
 
 			return app;
+		}
+
+		public static IApplicationBuilder EnableOnlineUsersCheck(this IApplicationBuilder app)
+		{
+			return app.UseMiddleware<OnlineUsersMiddleware>();
 		}
 	}
 }

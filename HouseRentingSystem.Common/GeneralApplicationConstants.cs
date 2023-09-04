@@ -9,5 +9,8 @@
 		public const string AdminAreaName = "Admin";
 		public const string AdminRoleName = "Administrator";
 		public const string DevelopementAdminEmail = "admin@admin.com";
+
+		public const string OnlineUsersCookieName = "IsOnline";
+		public const int LastActivityBeforeOfflineMinutes = 10;
 	}
 }
